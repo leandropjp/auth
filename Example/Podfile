@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'FractalAuth_Example' do
+  pod 'FractalAuth', :path => '../'
+
+  target 'FractalAuth_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end

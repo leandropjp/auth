@@ -1,0 +1,25 @@
+PODS:
+  - FractalAuth (0.1.0):
+    - PromiseKit/Foundation (~> 6.8)
+  - PromiseKit/CorePromise (6.8.3)
+  - PromiseKit/Foundation (6.8.3):
+    - PromiseKit/CorePromise
+
+DEPENDENCIES:
+  - FractalAuth (from `../`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - PromiseKit
+
+EXTERNAL SOURCES:
+  FractalAuth:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  FractalAuth: 739d0382e185bec2507b6fa66b13a00ba7187b9e
+  PromiseKit: 94c6e781838c5bf4717677d0d882b0e7250c80fc
+
+PODFILE CHECKSUM: 7899ceed0322ccdac6e3f774340154ecdfdabc1b
+
+COCOAPODS: 1.6.0
