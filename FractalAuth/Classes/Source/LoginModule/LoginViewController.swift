@@ -66,6 +66,7 @@ class LoginViewController: UIViewController, LoginViewInput
         return iv
     }()
 
+    lazy var maskView = UIView()
 
     lazy var logoView = UIImageView()
     lazy var bottomLogoView = UIImageView()
@@ -136,18 +137,6 @@ class LoginViewController: UIViewController, LoginViewInput
 
         logoImageView.image = bundle.image
         mainStackView.insertArrangedSubview(logoImageView, at: 0)
-        DispatchQueue.main.async {
-            //self.mainStackView.setNeedsLayout()
-            //self.mainStackView.layoutIfNeeded()
-        }
-
-        //logoImageView.heightAnchor.constraint(lessThanOrEqualToConstant: 40).isActive = true
-
-        //view.addSubview(logoImageView)
-        //        logoImageView.anchor(view.compatibleSafeAreaLayoutGuide.topAnchor, left: view.leftAnchor,
-        //                             bottom: cardView.topAnchor, right: view.rightAnchor, topConstant: 16,
-        //                             leftConstant: 32, bottomConstant: 20, rightConstant: 32,
-        //                             widthConstant: 0, heightConstant: 0)
         logoView.isHidden = true
 
         if let appName = bundle.appName {
@@ -159,22 +148,31 @@ class LoginViewController: UIViewController, LoginViewInput
         if let bgImage = bundle.bgImage {
             bgImageView.image = bgImage
             bgImageView.alpha = 0.6
+        } else {
+            bgImageView.isHidden = true
+        }
+
+        if let bgColor = bundle.bgColor {
+            view.backgroundColor = bgColor
         }
 
     }
 
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+
+    }
+
     func setupView() {
-        //let img1 = UIImage(named: "bg", in: bundle, compatibleWith: nil)
-
         view.backgroundColor = .white
-        //bgImageView = UIImageView(image: img1)
-
         view.addSubview(bgImageView)
         bgImageView.fillSuperview()
-        let maskView = UIView()
-        maskView.backgroundColor = UIColor.white.withAlphaComponent(0.5)
-        view.addSubview(maskView)
+
+        maskView.backgroundColor = UIColor.white.withAlphaComponent(0.6)
+
+        bgImageView.insertSubview(maskView, at: 0)
         maskView.fillSuperview()
+
         mainStackView.addArrangedSubview(cardView)
         view.addSubview(mainStackView)
         mainStackView.anchor(nil, left: view.leftAnchor, bottom: nil,

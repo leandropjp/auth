@@ -32,11 +32,16 @@ public struct CustomizeBundle {
     var image: UIImage?
     var appName: String?
     var bgImage: UIImage?
+    var bgColor: UIColor?
 
-    public init(appImage: UIImage?, appName: String, bgImage: UIImage? = nil) {
+    public init(appImage: UIImage?, appName: String, bgImage: UIImage? = nil, bgColor: UIColor? = nil) {
+        if appImage == nil {
+            fatalError("Invalid App Image.")
+        }
         self.image = appImage
         self.appName = appName
         self.bgImage = bgImage
+        self.bgColor = bgColor
     }
 }
 

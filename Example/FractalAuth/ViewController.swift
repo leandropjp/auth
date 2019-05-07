@@ -70,7 +70,7 @@ class LoginController: UIViewController {
     }
     @objc func presentCustomSignIn() {
         let bundle = CustomizeBundle(appImage: UIImage(named: "logo_ludie"), appName: "Ludie",
-                                     bgImage: UIImage(named: "bg"))
+                                     bgImage: UIImage(named: ""), bgColor: .red)
         FractalAuth.presentSignIn(with: bundle)
             .done { (user) in
                 print(user)

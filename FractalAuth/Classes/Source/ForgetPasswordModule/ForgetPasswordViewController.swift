@@ -154,6 +154,12 @@ class ForgetPasswordViewController: UIViewController {
         if let bgImage = bundle.bgImage {
             bgImageView.image = bgImage
             bgImageView.alpha = 0.6
+        } else {
+            bgImageView.isHidden = true
+        }
+
+        if let bgColor = bundle.bgColor {
+            view.backgroundColor = bgColor
         }
     }
 
