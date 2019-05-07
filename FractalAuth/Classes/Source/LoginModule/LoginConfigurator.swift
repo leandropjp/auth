@@ -27,10 +27,6 @@ class LoginModuleConfigurator {
         presenter.view = viewController
         presenter.router = router
 
-        let interactor = LoginInteractor()
-        interactor.output = presenter
-
-        presenter.interactor = interactor
         viewController.output = presenter
     }
 

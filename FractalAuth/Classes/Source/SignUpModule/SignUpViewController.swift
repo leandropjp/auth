@@ -1,29 +1,34 @@
 //
-//  LoginViewController.swift
+//  SignUpViewController.swift
 //  Pods
 //
-//  Created by Leandro Paiva Andrade on 4/16/19.
+//  Created by Leandro Paiva Andrade on 5/3/19.
 //  Copyright (c) 2019 ___ORGANIZATIONNAME___. All rights reserved.
 //
 
 import UIKit
 import PromiseKit
 
-protocol LoginViewInput: class {
+protocol SignUpViewInput: class {
 
 }
 
-protocol LoginViewOutput {
-    func doLogin(with email: String, password: String)
+protocol SignUpViewOutput {
+    
 }
 
-class LoginViewController: UIViewController, LoginViewInput
+class SignUpViewController: UIViewController, SignUpViewInput
 {
-    var output:  LoginViewOutput!
+
+    lazy var nameField: CustomTextField = {
+        let tf = CustomTextField()
+        tf.placeholder = "Nome completo"
+        return tf
+    }()
 
     lazy var emailField: CustomTextField = {
         let tf = CustomTextField()
-        tf.placeholder = "Fractal Id ou Email"
+        tf.placeholder = "Email"
         return tf
     }()
 
@@ -31,6 +36,14 @@ class LoginViewController: UIViewController, LoginViewInput
         let tf = CustomTextField()
         tf.isSecureTextEntry = true
         tf.placeholder = "Senha"
+        tf.addToggleSecurityButton()
+        return tf
+    }()
+
+    lazy var confirmPasswordField: CustomTextField = {
+        let tf = CustomTextField()
+        tf.isSecureTextEntry = true
+        tf.placeholder = "Confirmar senha"
         tf.addToggleSecurityButton()
         return tf
     }()
@@ -67,10 +80,10 @@ class LoginViewController: UIViewController, LoginViewInput
     }()
 
 
-    lazy var logoView = UIImageView()
+    lazy var cardLogoView = UIImageView()
     lazy var bottomLogoView = UIImageView()
     var customizeBundle: CustomizeBundle?
-
+    var isFromLogin = false
     lazy var mainStackView: UIStackView = {
         let stack = UIStackView()
         stack.spacing = 16
@@ -78,35 +91,36 @@ class LoginViewController: UIViewController, LoginViewInput
         return stack
     }()
 
-    var loginResult: (promise: Promise<User>, resolver: Resolver<User>)?
-    var isFromSignUp = false
+    var signUpResult: (promise: Promise<User>, resolver: Resolver<User>)?
+    var test: Promise<User>?
+    var output:  SignUpViewOutput!
 
     // MARK: Object lifecycle
     override func awakeFromNib()
     {
         super.awakeFromNib()
-        let configurator = LoginModuleConfigurator()
+        let configurator = SignUpModuleConfigurator()
         configurator.configureModuleForViewInput(viewInput: self)
     }
 
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?)
     {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
-        let configurator = LoginModuleConfigurator()
+        let configurator = SignUpModuleConfigurator()
         configurator.configureModuleForViewInput(viewInput: self)
     }
 
     required init?(coder aDecoder: NSCoder)
     {
         super.init(coder: aDecoder)
-        let configurator = LoginModuleConfigurator()
+        let configurator = SignUpModuleConfigurator()
         configurator.configureModuleForViewInput(viewInput: self)
     }
 
     // MARK: View lifecycle
 
     lazy var cardView: CardView = CardView()
-    let bundle = Bundle(for: LoginViewController.self).podResource(name: "FractalAuth")
+    let bundle = Bundle(for: SignUpViewController.self).podResource(name: "FractalAuth")
     var mainStackTopAnchor: NSLayoutConstraint?
     var mainStackBottomAnchor: NSLayoutConstraint?
 
@@ -118,6 +132,7 @@ class LoginViewController: UIViewController, LoginViewInput
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
         navigationController?.navigationBar.tintColor = .red
+        self.title = "Cadastro"
         setupView()
 
         if let bundle = self.customizeBundle {
@@ -136,22 +151,10 @@ class LoginViewController: UIViewController, LoginViewInput
 
         logoImageView.image = bundle.image
         mainStackView.insertArrangedSubview(logoImageView, at: 0)
-        DispatchQueue.main.async {
-            //self.mainStackView.setNeedsLayout()
-            //self.mainStackView.layoutIfNeeded()
-        }
 
-        //logoImageView.heightAnchor.constraint(lessThanOrEqualToConstant: 40).isActive = true
-
-        //view.addSubview(logoImageView)
-        //        logoImageView.anchor(view.compatibleSafeAreaLayoutGuide.topAnchor, left: view.leftAnchor,
-        //                             bottom: cardView.topAnchor, right: view.rightAnchor, topConstant: 16,
-        //                             leftConstant: 32, bottomConstant: 20, rightConstant: 32,
-        //                             widthConstant: 0, heightConstant: 0)
-        logoView.isHidden = true
-
+        cardLogoView.isHidden = true
         if let appName = bundle.appName {
-            infoLabel.text = "Entre com sua conta Fractal para prosseguir para o \(appName)."
+            infoLabel.text = "Crie uma Conta Fractal para prosseguir para o \(appName)."
         } else {
             infoLabel.isHidden = true
         }
@@ -185,25 +188,17 @@ class LoginViewController: UIViewController, LoginViewInput
 
         mainStackBottomAnchor = mainStackView.bottomAnchor.constraint(equalTo: view.compatibleSafeAreaLayoutGuide.bottomAnchor, constant: -32)
         mainStackBottomAnchor?.isActive = true
-        self.navigationItem.title = "Login"
         addBackButton()
 
-        //addLogo()
         addFields()
     }
 
-    @objc func forgetPasswordTapped() {
-        let vc = ForgetPasswordViewController()
-        vc.customizeBundle = customizeBundle
-        self.navigationController?.pushViewController(vc, animated: true)
-    }
-
-    @objc func createAccountTapped() {
-        if !isFromSignUp {
-            let vc = SignUpViewController()
+    @objc func hasAccountTapped() {
+        if !isFromLogin {
+            let vc = LoginViewController()
             vc.customizeBundle = customizeBundle
-            vc.isFromLogin = true
-            vc.signUpResult = loginResult
+            vc.isFromSignUp = true
+            vc.loginResult = signUpResult
             self.navigationController?.pushViewController(vc, animated: true)
         } else {
             self.navigationController?.popViewController(animated: true)
@@ -211,7 +206,8 @@ class LoginViewController: UIViewController, LoginViewInput
     }
 
     @objc func submitLogin() {
-        guard let email = emailField.text, let password = passwordField.text else {
+        guard let email = emailField.text, let password = passwordField.text,
+            let confirmPassword = confirmPasswordField.text, let name = nameField.text else {
             return
         }
         var isValidInfo = true
@@ -227,6 +223,18 @@ class LoginViewController: UIViewController, LoginViewInput
             isValidInfo = false
         }
 
+        if !confirmPassword.isValidPassword() && confirmPassword != password {
+            confirmPasswordField.tintColor = .red
+            confirmPasswordField.textColor = .red
+            isValidInfo = false
+        }
+
+        if !name.isValidName() {
+            nameField.tintColor = .red
+            nameField.textColor = .red
+            isValidInfo = false
+        }
+
         if isValidInfo {
             let credentials = Credentials(login: email, password: password.toBase64())
             self.displayActivityIndicator(shouldDisplay: true)
@@ -234,14 +242,14 @@ class LoginViewController: UIViewController, LoginViewInput
             firstly {
                 FractalRestAPI.shared.login(with: credentials)
                 }.done {[weak self] (user) in
-                    self?.loginResult?.resolver.fulfill(user)
+                    self?.signUpResult?.resolver.fulfill(user)
                     self?.backAction()
                 }.ensure {
                     UIApplication.shared.isNetworkActivityIndicatorVisible = false
                 }.catch {[weak self] (error) in
                     print(error)
                     self?.displayActivityIndicator(shouldDisplay: false)
-                    self?.infoLabel.text = "Verifique suas credenticias e tente novamente."
+                    self?.infoLabel.text = "Verifique se os dados inseridos estão corretos."
                     self?.infoLabel.textColor = .red
             }
         }
@@ -252,38 +260,34 @@ class LoginViewController: UIViewController, LoginViewInput
         var buttonFontSize: CGFloat = 16
         var stackViewSpacing: CGFloat = 16
         var defaultFontSize: CGFloat = 14
+        var buttonSize: CGFloat = 40
+        var bottomHeight: CGFloat = 55
+        var logoHeight: CGFloat = 0
+        var fieldHeight: CGFloat = 40
         if UIDevice().screenType == .iPhones_5_5s_5c_SE {
-            stackViewSpacing = 10
+            stackViewSpacing = 8
             buttonFontSize = 14
             defaultFontSize = 12
+            buttonSize = 38
+            bottomHeight = 35
+            logoHeight = 60
+            fieldHeight = 35
         }
 
         let logoImg = UIImage(named: "fractal_horizontal", in: bundle, compatibleWith: nil)
-        logoView.image = logoImg
-        logoView.contentMode = .center
+        cardLogoView.image = logoImg
+        cardLogoView.contentMode = .center
+        if logoHeight > 0 {
+            logoImageView.heightAnchor.constraint(equalToConstant: logoHeight).isActive = true
+            logoImageView.contentMode = .scaleAspectFit
+        }
 
         bottomLogoView.image = logoImg
         bottomLogoView.contentMode = .scaleAspectFit
-        bottomLogoView.heightAnchor.constraint(lessThanOrEqualToConstant: 55).isActive = true
-
-        let forgetPasswordBtn = UIButton()
-        forgetPasswordBtn.setTitle("Esqueci minha senha", for: .normal)
-        forgetPasswordBtn.setTitleColor(redColor, for: .normal)
-        forgetPasswordBtn.titleLabel?.font = UIFont.systemFont(ofSize: defaultFontSize)
-        forgetPasswordBtn.addTarget(self, action: #selector(forgetPasswordTapped), for: .touchUpInside)
-
-        let passwordView = UIView()
-        passwordView.addSubview(passwordField)
-        passwordField.anchor(passwordView.topAnchor, left: passwordView.leftAnchor, bottom: nil,
-                             right: passwordView.rightAnchor, topConstant: 0, leftConstant: 0,
-                             bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 0)
-        passwordView.addSubview(forgetPasswordBtn)
-        forgetPasswordBtn.anchor(passwordField.bottomAnchor, left: nil, bottom: passwordView.bottomAnchor,
-                                 right: passwordField.rightAnchor, topConstant: 4, leftConstant: 0,
-                                 bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 30)
+        bottomLogoView.heightAnchor.constraint(lessThanOrEqualToConstant: bottomHeight).isActive = true
 
         let enterButton = ButtonWithShadow()
-        enterButton.setTitle("Entrar", for: .normal)
+        enterButton.setTitle("Cadastrar", for: .normal)
         enterButton.setTitleColor(.white, for: .normal)
         enterButton.backgroundColor = redColor
         enterButton.titleLabel?.font = UIFont.boldSystemFont(ofSize: buttonFontSize)
@@ -293,24 +297,28 @@ class LoginViewController: UIViewController, LoginViewInput
         signupLabel.numberOfLines = 0
         signupLabel.textAlignment = .center
 
-        let attrs = NSMutableAttributedString(string: "Não tem conta Fractal?\n",
+        let attrs = NSMutableAttributedString(string: "Já possui uma conta Fractal?\n",
                                               attributes: [.font: UIFont.systemFont(ofSize: defaultFontSize)])
-        attrs.append(NSAttributedString(string: "Cadastre-se!", attributes: [.foregroundColor: redColor,
+        attrs.append(NSAttributedString(string: "Entrar", attributes: [.foregroundColor: redColor,
                                                                              .font: UIFont.boldSystemFont(ofSize: defaultFontSize)]))
+
         signupLabel.attributedText = attrs
         signupLabel.isUserInteractionEnabled = true
-        let tap = UITapGestureRecognizer(target: self, action: #selector(createAccountTapped))
+        let tap = UITapGestureRecognizer(target: self, action: #selector(hasAccountTapped))
         signupLabel.addGestureRecognizer(tap)
-        
+
         infoLabel.font = UIFont.systemFont(ofSize: defaultFontSize, weight: .medium)
 
-        let stackView = UIStackView(arrangedSubviews: [logoView, infoLabel, errorLabel, emailField, passwordView, enterButton, signupLabel, bottomLogoView])
+        let stackView = UIStackView(arrangedSubviews: [cardLogoView, infoLabel, errorLabel,nameField, emailField,
+                                                       passwordField, confirmPasswordField, enterButton, signupLabel, bottomLogoView])
         stackView.axis = .vertical
         stackView.spacing = stackViewSpacing
 
-        emailField.sizeAnchor(widthConstant: 0, heightConstant: 40)
-        passwordField.sizeAnchor(widthConstant: 0, heightConstant: 40)
-        enterButton.sizeAnchor(widthConstant: 0, heightConstant: 44)
+        nameField.sizeAnchor(widthConstant: 0, heightConstant: fieldHeight)
+        confirmPasswordField.sizeAnchor(widthConstant: 0, heightConstant: fieldHeight)
+        emailField.sizeAnchor(widthConstant: 0, heightConstant: fieldHeight)
+        passwordField.sizeAnchor(widthConstant: 0, heightConstant: fieldHeight)
+        enterButton.sizeAnchor(widthConstant: 0, heightConstant: buttonSize)
 
         view.addSubview(stackView)
         stackView.anchor(cardView.contentView.topAnchor, left: cardView.contentView.leftAnchor,
@@ -331,14 +339,12 @@ class LoginViewController: UIViewController, LoginViewInput
     }
 
     @objc private func backAction() {
-        if isFromSignUp && !(loginResult?.promise.isResolved ?? true) {
-            
+        if isFromLogin && !(signUpResult?.promise.isResolved ?? true) {
             self.navigationController?.popViewController(animated: true)
         } else {
-            self.loginResult?.resolver.reject(ErrorType.resultNil)
+            self.signUpResult?.resolver.reject(ErrorType.resultNil)
             self.navigationController?.dismiss(animated: true, completion: nil)
         }
-
 
     }
 
@@ -349,18 +355,7 @@ class LoginViewController: UIViewController, LoginViewInput
     }
 
     deinit {
-        //loginResult
-        //loginResult = nil
+        print("DENINIT")
     }
+
 }
-//
-//extension Promise {
-//    func timeout(seconds: TimeInterval) -> Promise<T> {
-//        let pending = Promise<T>.pending()
-//        after(seconds: seconds).done {
-//            pending.resolver.reject(TimeoutError())
-//        }
-//        pipe(to: pending.resolver.resolve)
-//        return pending.promise
-//    }
-//}

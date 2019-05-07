@@ -12,9 +12,8 @@ protocol LoginModuleInput: class {
 
 }
 
-class LoginPresenter: LoginModuleInput, LoginViewOutput, LoginInteractorOutput {
+class LoginPresenter: LoginModuleInput, LoginViewOutput {
     weak var view: LoginViewInput!
-    var interactor: LoginInteractorInput!
     var router: LoginRouterInput!
 
     func doLogin(with email: String, password: String) {

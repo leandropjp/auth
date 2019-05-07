@@ -16,6 +16,8 @@ public enum HTTPMethod {
     case get
 }
 
+let userKey = "userKey"
+let userPhrase = "userPhraseKey"
 typealias JSON = [String:Any]
 
 class FractalRestAPI {
@@ -35,13 +37,55 @@ class FractalRestAPI {
                                                                           obj: params)).validate()
             }.tap {
                 print($0)
+            }.get {
+                UserDefaults.standard.set($0.data, forKey: userKey)
             }.compactMap {
                 try decoder.decode(User.self, from: $0.data)
         }
     }
 
+    func requestPassword(with params: Credentials) -> Promise<UserPhrase> {
+        let url = Router.user.urlWith(path: "recover_password")
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return firstly {
+            URLSession.shared.dataTask(.promise, with: try makeUrlRequest(httpMethod: .post,
+                                                                          urlString: url,
+                                                                          obj: params)).validate()
+            }.tap {
+                print($0)
+            }.get {
+                UserDefaults.standard.set($0.data, forKey: userPhrase)
+            }.compactMap {
+                if let response = $0.response as? HTTPURLResponse {
+                    if response.statusCode != 204 {
+                        return try decoder.decode(User.self, from: $0.data).userPhrase
+                    }
+                }
+                return UserPhrase()
+        }
+
+    }
+
+    func requestResetPassword(with obj: ResetPasswordCredentials) -> Promise<UserPhrase> {
+        let url = Router.user.urlWith(path: "reset_password")
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return firstly {
+            URLSession.shared.dataTask(.promise, with: try makeUrlRequest(httpMethod: .post,
+                                                                          urlString: url,
+                                                                          obj: obj))
+            }.tap {
+                print($0)
+            }.get {
+                UserDefaults.standard.set($0.data, forKey: userPhrase)
+            }.compactMap {
+                return try decoder.decode(User.self, from: $0.data).userPhrase
+        }
+    }
+
     func makeUrlRequest<T: Codable>(httpMethod: HTTPMethod = .get, urlString: String, params: JSON? = nil,
-                                    obj: T? = nil) throws -> URLRequest {
+                                    obj: T? = nil as T?) throws -> URLRequest {
         let url = URL(string: urlString)!
         var rq = URLRequest(url: url)
         rq.httpMethod = "\(httpMethod)"
@@ -64,36 +108,5 @@ class FractalRestAPI {
 
         return rq
     }
-}
-
-public struct Credentials: Codable {
-    var login: String?
-    var password: String?
-}
-public struct User: Codable {
-    public var id: Int?
-    public var name: String?
-    public var email: String?
-    public var fractalId: Int?
-    public var token: String?
-    public var genre: String?
-    public var birthday: String?
-    public var photoUrl: String?
-    public var active: Bool?
-    public var facebookUuid: String?
-
-    public var userPhrase: UserPhrase?
-
-    private var password: String?
-    private var phraseAnswer: String?
-    private var facebookToken: String?
-    private var userUserPhraseId: Int?
-}
-
-public class UserPhrase: Codable {
-    public var id: Int?
-    public var name: String?
-
-    public init(){}
 }
 

@@ -25,6 +25,11 @@ extension String {
         return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: self) || isNumeric
     }
 
+    func isValidName() -> Bool {
+        let regex = "^(([^ ]?)(^[a-zA-Z].*[a-zA-Z]$)([^ ]?))$"
+        return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: self)
+    }
+
     var isNumeric: Bool {
         guard self.count > 0 else { return false }
         let nums: Set<Character> = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
