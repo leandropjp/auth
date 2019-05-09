@@ -7,6 +7,7 @@
 
 import Foundation
 import PromiseKit
+import IQKeyboardManager
 
 enum ErrorType: LocalizedError {
     case resultNil
@@ -46,6 +47,10 @@ public struct CustomizeBundle {
 }
 
 public class FractalAuth {
+
+    init() {
+        IQKeyboardManager.shared().isEnabled = true
+    }
 
     public static func logout() {
         UserDefaults.standard.removeObject(forKey: userKey)

@@ -23,12 +23,14 @@ class LoginViewController: UIViewController, LoginViewInput
 
     lazy var emailField: CustomTextField = {
         let tf = CustomTextField()
+        tf.delegate = self
         tf.placeholder = "Fractal Id ou Email"
         return tf
     }()
 
     lazy var passwordField: CustomTextField = {
         let tf = CustomTextField()
+        tf.delegate = self
         tf.isSecureTextEntry = true
         tf.placeholder = "Senha"
         tf.addToggleSecurityButton()
@@ -78,6 +80,8 @@ class LoginViewController: UIViewController, LoginViewInput
         stack.axis = .vertical
         return stack
     }()
+
+    let enterButton = ButtonWithShadow()
 
     var loginResult: (promise: Promise<User>, resolver: Resolver<User>)?
     var isFromSignUp = false
@@ -280,7 +284,7 @@ class LoginViewController: UIViewController, LoginViewInput
                                  right: passwordField.rightAnchor, topConstant: 4, leftConstant: 0,
                                  bottomConstant: 0, rightConstant: 0, widthConstant: 0, heightConstant: 30)
 
-        let enterButton = ButtonWithShadow()
+
         enterButton.setTitle("Entrar", for: .normal)
         enterButton.setTitleColor(.white, for: .normal)
         enterButton.backgroundColor = redColor
@@ -350,6 +354,49 @@ class LoginViewController: UIViewController, LoginViewInput
         //loginResult
         //loginResult = nil
     }
+}
+
+extension LoginViewController: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == emailField {
+            if validateEmailField() {
+                passwordField.becomeFirstResponder()
+            } else {
+                emailField.tintColor = .red
+                emailField.textColor = .red
+            }
+        }
+
+        if textField == passwordField {
+            if validatePasswordField() {
+                enterButton.sendActions(for: .touchUpInside)
+                passwordField.resignFirstResponder()
+            } else {
+                passwordField.tintColor = .red
+                passwordField.textColor = .red
+            }
+        }
+
+        return true
+    }
+
+    func validateEmailField() -> Bool {
+        if let email = emailField.text, !email.isValidEmail() || email.isEmpty {
+            return false
+        } else {
+            return true
+        }
+    }
+
+    func validatePasswordField() -> Bool {
+        if let password = passwordField.text, !password.isValidPassword() || password.isEmpty {
+            return false
+        } else {
+            return true
+        }
+    }
+
 }
 //
 //extension Promise {
