@@ -31,7 +31,7 @@ extension UIViewController {
         overlay.tag = overlayViewTag
         
         //configure activity indicator
-        let activityIndicator = UIActivityIndicatorView(activityIndicatorStyle: .whiteLarge)
+        let activityIndicator = UIActivityIndicatorView(style: .whiteLarge)
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         activityIndicator.tag = activityIndicatorTag
         
