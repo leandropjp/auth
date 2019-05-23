@@ -27,6 +27,27 @@ class FractalRestAPI {
     var environment: Environment = .production
     var token: String?
 
+    func signUp(with params: Credentials) -> Promise<User> {
+        let url = Router.user.urlWith(path: "")
+        let decoder = JSONDecoder()
+        if let dd = try? JSONEncoder().encode(params) {
+        let json = try? JSONSerialization.jsonObject(with: dd, options: [.allowFragments])
+            print(json)
+        }
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        return firstly {
+            URLSession.shared.dataTask(.promise, with: try makeUrlRequest(httpMethod: .post,
+                                                                          urlString: url,
+                                                                          obj: params)).validate()
+            }.tap {
+                print($0)
+            }.get {
+                UserDefaults.standard.set($0.data, forKey: userKey)
+            }.compactMap {
+                try decoder.decode(User.self, from: $0.data)
+        }
+    }
+
     func login(with params: Credentials) -> Promise<User> {
         let url = Router.user.urlWith(path: "auth")
         let decoder = JSONDecoder()

@@ -107,4 +107,13 @@ public class FractalAuth {
 
         return vc.signUpResult?.promise ?? errorPromise
     }
+
+    public static func presentProfile() {
+        let vc = ProfileViewController()
+        let nav = UINavigationController(rootViewController: vc)
+        //nav.isNavigationBarHidden = true
+        if let window = UIApplication.shared.keyWindow {
+            window.rootViewController?.present(nav, animated: true, completion: nil)
+        }
+    }
 }

@@ -25,6 +25,7 @@ class LoginViewController: UIViewController, LoginViewInput
         let tf = CustomTextField()
         tf.delegate = self
         tf.placeholder = "Fractal Id ou Email"
+        tf.delegate = self
         return tf
     }()
 
@@ -34,6 +35,7 @@ class LoginViewController: UIViewController, LoginViewInput
         tf.isSecureTextEntry = true
         tf.placeholder = "Senha"
         tf.addToggleSecurityButton()
+        tf.delegate = self
         return tf
     }()
 
@@ -356,30 +358,30 @@ class LoginViewController: UIViewController, LoginViewInput
     }
 }
 
-extension LoginViewController: UITextFieldDelegate {
+extension LoginViewController {
 
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if textField == emailField {
-            if validateEmailField() {
-                passwordField.becomeFirstResponder()
-            } else {
-                emailField.tintColor = .red
-                emailField.textColor = .red
-            }
-        }
-
-        if textField == passwordField {
-            if validatePasswordField() {
-                enterButton.sendActions(for: .touchUpInside)
-                passwordField.resignFirstResponder()
-            } else {
-                passwordField.tintColor = .red
-                passwordField.textColor = .red
-            }
-        }
-
-        return true
-    }
+//    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        if textField == emailField {
+//            if validateEmailField() {
+//                passwordField.becomeFirstResponder()
+//            } else {
+//                emailField.tintColor = .red
+//                emailField.textColor = .red
+//            }
+//        }
+//
+//        if textField == passwordField {
+//            if validatePasswordField() {
+//                enterButton.sendActions(for: .touchUpInside)
+//                passwordField.resignFirstResponder()
+//            } else {
+//                passwordField.tintColor = .red
+//                passwordField.textColor = .red
+//            }
+//        }
+//
+//        return true
+//    }
 
     func validateEmailField() -> Bool {
         if let email = emailField.text, !email.isValidEmail() || email.isEmpty {

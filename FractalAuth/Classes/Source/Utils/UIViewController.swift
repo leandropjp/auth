@@ -10,7 +10,13 @@ import Foundation
 fileprivate let overlayViewTag = 999
 fileprivate let activityIndicatorTag = 1000
 
-extension UIViewController {
+extension UIViewController: UITextFieldDelegate {
+    
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+
     public func displayActivityIndicator(shouldDisplay: Bool) -> Void {
         if shouldDisplay {
             setActivityIndicator()

@@ -8,8 +8,21 @@
 import Foundation
 
 public struct Credentials: Codable {
-    var login: String?
+    var email: String?
     var password: String?
+    var name: String?
+
+    init(login: String, password: String?) {
+        self.email = login
+        self.password = password
+        self.name = nil
+    }
+
+    init(login: String, password: String?, name: String?) {
+        self.email = login
+        self.password = password
+        self.name = name
+    }
 }
 
 public struct User: Codable {

@@ -26,8 +26,8 @@ class LoginController: UIViewController {
         let btn2 = createButton(title: "Default SignIn", method: #selector(presentDefaultSignIn))
         let btn3 = createButton(title: "Default SignUp", method: #selector(presentDefaultSignUp))
         let btn4 = createButton(title: "Custom SignUp", method: #selector(presentCustomSignUp))
-
-        let stackView = UIStackView(arrangedSubviews: [btn1, btn2, btn3, btn4])
+        let btn5 = createButton(title: "Profile", method: #selector(presentProfile))
+        let stackView = UIStackView(arrangedSubviews: [btn1, btn2, btn3, btn4, btn5])
         stackView.axis = .vertical
         stackView.spacing = 8
         stackView.isUserInteractionEnabled = true
@@ -106,6 +106,10 @@ class LoginController: UIViewController {
             }.catch { (error) in
                 print(error.localizedDescription)
         }
+    }
+
+    @objc func presentProfile() {
+        FractalAuth.presentProfile()
     }
 }
 

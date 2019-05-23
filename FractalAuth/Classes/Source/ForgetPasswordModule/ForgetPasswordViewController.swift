@@ -210,8 +210,8 @@ class ForgetPasswordViewController: UIViewController {
                 }.done {[weak self] (phrase) in
                     //Presente modal
                     if let phrase = phrase.name {
-                        self?.fractalId = credentials.login ?? ""
-                        self?.prepareRedefineView(with: phrase, fractalId: credentials.login ?? "")
+                        self?.fractalId = credentials.email ?? ""
+                        self?.prepareRedefineView(with: phrase, fractalId: credentials.email ?? "")
                     } else {
                         self?.presentModal()
                     }

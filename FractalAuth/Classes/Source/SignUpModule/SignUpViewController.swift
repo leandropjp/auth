@@ -23,12 +23,16 @@ class SignUpViewController: UIViewController, SignUpViewInput
     lazy var nameField: CustomTextField = {
         let tf = CustomTextField()
         tf.placeholder = "Nome completo"
+        tf.delegate = self
         return tf
     }()
 
     lazy var emailField: CustomTextField = {
         let tf = CustomTextField()
+        tf.autocapitalizationType = UITextAutocapitalizationType.none
+        tf.autocorrectionType = UITextAutocorrectionType.no
         tf.placeholder = "Email"
+        tf.delegate = self
         return tf
     }()
 
@@ -37,6 +41,7 @@ class SignUpViewController: UIViewController, SignUpViewInput
         tf.isSecureTextEntry = true
         tf.placeholder = "Senha"
         tf.addToggleSecurityButton()
+        tf.delegate = self
         return tf
     }()
 
@@ -45,6 +50,7 @@ class SignUpViewController: UIViewController, SignUpViewInput
         tf.isSecureTextEntry = true
         tf.placeholder = "Confirmar senha"
         tf.addToggleSecurityButton()
+        tf.delegate = self
         return tf
     }()
 
@@ -242,11 +248,11 @@ class SignUpViewController: UIViewController, SignUpViewInput
         }
 
         if isValidInfo {
-            let credentials = Credentials(login: email, password: password.toBase64())
+            let credentials = Credentials(login: email, password: password.toBase64(), name: name)
             self.displayActivityIndicator(shouldDisplay: true)
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
             firstly {
-                FractalRestAPI.shared.login(with: credentials)
+                FractalRestAPI.shared.signUp(with: credentials)
                 }.done {[weak self] (user) in
                     self?.signUpResult?.resolver.fulfill(user)
                     self?.backAction()
