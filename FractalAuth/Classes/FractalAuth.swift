@@ -7,7 +7,7 @@
 
 import Foundation
 import PromiseKit
-import IQKeyboardManager
+import IQKeyboardManagerSwift
 
 enum ErrorType: LocalizedError {
     case resultNil
@@ -49,7 +49,8 @@ public struct CustomizeBundle {
 public class FractalAuth {
 
     init() {
-        IQKeyboardManager.shared().isEnabled = true
+        IQKeyboardManager.shared.enable = true
+        IQKeyboardManager.shared.enableToolbar = true
     }
 
     public static func logout() {
