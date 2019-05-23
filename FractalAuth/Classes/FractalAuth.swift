@@ -50,7 +50,7 @@ public class FractalAuth {
 
     init() {
         IQKeyboardManager.shared.enable = true
-        IQKeyboardManager.shared.enableToolbar = true
+        IQKeyboardManager.shared.enableAutoToolbar = true
     }
 
     public static func logout() {

@@ -1,8 +1,8 @@
 PODS:
-  - FractalAuth (0.2.2):
-    - IQKeyboardManager
+  - FractalAuth (0.2.3):
+    - IQKeyboardManagerSwift
     - PromiseKit/Foundation
-  - IQKeyboardManager (6.2.1)
+  - IQKeyboardManagerSwift (6.3.0)
   - PromiseKit/CorePromise (6.8.3)
   - PromiseKit/Foundation (6.8.3):
     - PromiseKit/CorePromise
@@ -12,7 +12,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
-    - IQKeyboardManager
+    - IQKeyboardManagerSwift
     - PromiseKit
 
 EXTERNAL SOURCES:
@@ -20,8 +20,8 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  FractalAuth: 1ae6aa3a698e0a16147bd8ab5650121532d68db4
-  IQKeyboardManager: 964638372b4a61892cc74fdfa6fd26de8c9464a2
+  FractalAuth: 333a75314df5dc56f547b6fe40927c2b28b25cd7
+  IQKeyboardManagerSwift: a8228c257614af98743b4cd8584637025f36358f
   PromiseKit: 94c6e781838c5bf4717677d0d882b0e7250c80fc
 
 PODFILE CHECKSUM: 7e86585c594909f3a67ca8af10ca66dca7e7542e
