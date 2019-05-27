@@ -75,18 +75,23 @@ class ProfileViewController: UIViewController, ProfileViewInput
     {
         super.viewDidLoad()
         view.backgroundColor = UIColor(hexString: "#E9E9E9")
+        let bgView = UIImageView(image: UIImage(named: "bg", in: bundle, compatibleWith: nil))
+        bgView.contentMode = .scaleAspectFill
+        view.addSubview(bgView)
+        bgView.fillSuperview()
         view.addSubview(cardView)
 
         cardView.translatesAutoresizingMaskIntoConstraints = false
         var sidePadding: CGFloat = 32
         if UIDevice().screenType == .iPhones_5_5s_5c_SE {
             sidePadding = 16
-            cardView.topAnchor.constraint(equalTo: view.compatibleSafeAreaLayoutGuide.topAnchor, constant: 16).isActive = true
-            cardView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: -16).isActive = true
+//            cardView.topAnchor.constraint(equalTo: view.compatibleSafeAreaLayoutGuide.topAnchor, constant: 16).isActive = true
+//            cardView.bottomAnchor.constraint(lessThanOrEqualTo: view.bottomAnchor, constant: -16).isActive = true
         } else {
-            cardView.anchorCenterYToSuperview()
+
         }
 
+        cardView.anchorCenterYToSuperview()
         cardView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: sidePadding).isActive = true
         cardView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -sidePadding).isActive = true
 
@@ -102,6 +107,7 @@ class ProfileViewController: UIViewController, ProfileViewInput
         profileImage.sizeAnchor(widthConstant: 60, heightConstant: 60)
         profileImage.layer.cornerRadius = 60 / 2
         let profileBtn = createButton(title: "Editar perfil")
+        profileBtn.addTarget(self, action: #selector(editProfile), for: .touchUpInside)
         let configBtn = createButton(title: "Configurações")
         //let nameBtn = createButton(title: "Alterar nome")
         profileBtn.sizeAnchor(widthConstant: 0, heightConstant: 44)
@@ -121,7 +127,7 @@ class ProfileViewController: UIViewController, ProfileViewInput
         mainStack.spacing = 26
 
         cardView.addSubview(mainStack)
-        mainStack.anchor(cardView.topAnchor, left: cardView.leftAnchor, bottom: nil, right: cardView.rightAnchor,
+        mainStack.anchor(cardView.topAnchor, left: cardView.leftAnchor, bottom: cardView.bottomAnchor, right: cardView.rightAnchor,
                          topConstant: 32, leftConstant: 32, bottomConstant: 32, rightConstant: 32,
                          widthConstant: 0, heightConstant: 0)
 
@@ -131,6 +137,11 @@ class ProfileViewController: UIViewController, ProfileViewInput
 
         addBackButton()
         setupNavBar()
+    }
+
+    @objc func editProfile() {
+        let vc = EditProfileViewController()
+        self.navigationController?.pushViewController(vc, animated: true)
     }
 
     private func createButton(title: String) -> UIButton {

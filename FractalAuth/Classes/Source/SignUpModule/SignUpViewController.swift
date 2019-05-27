@@ -248,7 +248,7 @@ class SignUpViewController: UIViewController, SignUpViewInput
         }
 
         if isValidInfo {
-            let credentials = Credentials(login: email, password: password.toBase64(), name: name)
+            let credentials = Credentials(login: email, password: password, name: name)
             self.displayActivityIndicator(shouldDisplay: true)
             UIApplication.shared.isNetworkActivityIndicatorVisible = true
             firstly {
