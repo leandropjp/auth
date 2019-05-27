@@ -257,12 +257,16 @@ class LoginViewController: UIViewController, LoginViewInput
         var buttonFontSize: CGFloat = 16
         var stackViewSpacing: CGFloat = 16
         var defaultFontSize: CGFloat = 14
+        var logoHeight: CGFloat = view.bounds.height * 0.134
         if UIDevice().screenType == .iPhones_5_5s_5c_SE {
             stackViewSpacing = 10
             buttonFontSize = 14
             defaultFontSize = 12
+            logoHeight = view.bounds.height * 0.15
         }
 
+        logoImageView.sizeAnchor(widthConstant: 0, heightConstant: logoHeight)
+        logoImageView.contentMode = .scaleAspectFit
         let logoImg = UIImage(named: "fractal_horizontal", in: bundle, compatibleWith: nil)
         logoView.image = logoImg
         logoView.contentMode = .center
@@ -306,7 +310,7 @@ class LoginViewController: UIViewController, LoginViewInput
         signupLabel.isUserInteractionEnabled = true
         let tap = UITapGestureRecognizer(target: self, action: #selector(createAccountTapped))
         signupLabel.addGestureRecognizer(tap)
-        
+
         infoLabel.font = UIFont.systemFont(ofSize: defaultFontSize, weight: .medium)
 
         let stackView = UIStackView(arrangedSubviews: [logoView, infoLabel, errorLabel, emailField, passwordView, enterButton, signupLabel, bottomLogoView])
@@ -337,7 +341,7 @@ class LoginViewController: UIViewController, LoginViewInput
 
     @objc private func backAction() {
         if isFromSignUp && !(loginResult?.promise.isResolved ?? true) {
-            
+
             self.navigationController?.popViewController(animated: true)
         } else {
             self.loginResult?.resolver.reject(ErrorType.resultNil)
@@ -361,28 +365,28 @@ class LoginViewController: UIViewController, LoginViewInput
 
 extension LoginViewController {
 
-//    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        if textField == emailField {
-//            if validateEmailField() {
-//                passwordField.becomeFirstResponder()
-//            } else {
-//                emailField.tintColor = .red
-//                emailField.textColor = .red
-//            }
-//        }
-//
-//        if textField == passwordField {
-//            if validatePasswordField() {
-//                enterButton.sendActions(for: .touchUpInside)
-//                passwordField.resignFirstResponder()
-//            } else {
-//                passwordField.tintColor = .red
-//                passwordField.textColor = .red
-//            }
-//        }
-//
-//        return true
-//    }
+    //    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    //        if textField == emailField {
+    //            if validateEmailField() {
+    //                passwordField.becomeFirstResponder()
+    //            } else {
+    //                emailField.tintColor = .red
+    //                emailField.textColor = .red
+    //            }
+    //        }
+    //
+    //        if textField == passwordField {
+    //            if validatePasswordField() {
+    //                enterButton.sendActions(for: .touchUpInside)
+    //                passwordField.resignFirstResponder()
+    //            } else {
+    //                passwordField.tintColor = .red
+    //                passwordField.textColor = .red
+    //            }
+    //        }
+    //
+    //        return true
+    //    }
 
     func validateEmailField() -> Bool {
         if let email = emailField.text, !email.isValidEmail() || email.isEmpty {
