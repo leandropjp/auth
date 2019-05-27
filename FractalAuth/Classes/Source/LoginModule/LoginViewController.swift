@@ -53,6 +53,7 @@ class LoginViewController: UIViewController, LoginViewInput
         let lbl = UILabel()
         lbl.font = UIFont.systemFont(ofSize: 12, weight: .medium)
         lbl.adjustsFontSizeToFitWidth = true
+        lbl.minimumScaleFactor = 0.5
         lbl.numberOfLines = 0
         lbl.textAlignment = .center
         return lbl

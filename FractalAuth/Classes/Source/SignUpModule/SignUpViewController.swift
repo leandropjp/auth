@@ -309,7 +309,7 @@ class SignUpViewController: UIViewController, SignUpViewInput
         signupLabel.numberOfLines = 0
         signupLabel.textAlignment = .center
 
-        let attrs = NSMutableAttributedString(string: "Já possui uma conta Fractal?\n",
+        let attrs = NSMutableAttributedString(string: "Já possui uma conta Fractal?  ",
                                               attributes: [.font: UIFont.systemFont(ofSize: defaultFontSize)])
         attrs.append(NSAttributedString(string: "Entrar", attributes: [.foregroundColor: redColor,
                                                                              .font: UIFont.boldSystemFont(ofSize: defaultFontSize)]))
