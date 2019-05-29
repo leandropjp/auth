@@ -13,6 +13,7 @@ class ForgetPasswordViewController: UIViewController {
 
     lazy var emailField: CustomTextField = {
         let tf = CustomTextField()
+        tf.delegate = self
         tf.placeholder = "Fractal Id ou Email"
         return tf
     }()
@@ -31,6 +32,7 @@ class ForgetPasswordViewController: UIViewController {
     lazy var passwordField: CustomTextField = {
         let tf = CustomTextField()
         tf.placeholder = "Nova senha"
+        tf.delegate = self
         tf.isHidden = true
         tf.isSecureTextEntry = true
         return tf
@@ -39,6 +41,7 @@ class ForgetPasswordViewController: UIViewController {
     lazy var confirmPasswordField: CustomTextField = {
         let tf = CustomTextField()
         tf.placeholder = "Confirmar nova senha"
+        tf.delegate = self
         tf.isHidden = true
         tf.isSecureTextEntry = true
         return tf
@@ -47,6 +50,7 @@ class ForgetPasswordViewController: UIViewController {
     lazy var answerField: CustomTextField = {
         let tf = CustomTextField()
         tf.placeholder = "Resposta da pergunta secreta"
+        tf.delegate = self
         tf.isHidden = true
         return tf
     }()
