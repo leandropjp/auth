@@ -27,7 +27,12 @@ class LoginController: UIViewController {
         let btn3 = createButton(title: "Default SignUp", method: #selector(presentDefaultSignUp))
         let btn4 = createButton(title: "Custom SignUp", method: #selector(presentCustomSignUp))
         let btn5 = createButton(title: "Profile", method: #selector(presentProfile))
-        let stackView = UIStackView(arrangedSubviews: [btn1, btn2, btn3, btn4, btn5])
+
+        let btn6 = createButton(title: "Get states", method: #selector(getStates))
+        let btn7 = createButton(title: "Get cities", method: #selector(getCities))
+        let btn8 = createButton(title: "Get units", method: #selector(getUnits))
+
+        let stackView = UIStackView(arrangedSubviews: [btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8])
         stackView.axis = .vertical
         stackView.spacing = 8
         stackView.isUserInteractionEnabled = true
@@ -68,6 +73,19 @@ class LoginController: UIViewController {
 
         return btn
     }
+
+    @objc func getStates() {
+        FractalAuth.getStates()
+    }
+
+    @objc func getCities() {
+
+    }
+
+    @objc func getUnits() {
+
+    }
+
     @objc func presentCustomSignIn() {
         let bundle = CustomizeBundle(appImage: UIImage(named: "logo_ludie"), appName: "Ludie",
                                      bgImage: UIImage(named: ""), bgColor: .red)

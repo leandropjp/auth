@@ -25,7 +25,7 @@ public enum Environment: Int {
         case .presentation: return "https://demo-datagateway.fractaltecnologia.com.br/api/v1"
         case .staging: return "https://staging.datagateway.fractaltecnologia.com.br/api/v1"
         case .development: return "https://dev-datagateway.fractaltecnologia.com.br/api/v1"
-        case .custom: return "https://\(customUrl)"
+        case .custom: return "\(customUrl)"
         }
     }
 

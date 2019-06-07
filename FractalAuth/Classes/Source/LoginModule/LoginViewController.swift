@@ -23,6 +23,8 @@ class LoginViewController: UIViewController, LoginViewInput
 
     lazy var emailField: CustomTextField = {
         let tf = CustomTextField()
+        tf.autocapitalizationType = UITextAutocapitalizationType.none
+        tf.keyboardType = UIKeyboardType.emailAddress
         tf.delegate = self
         tf.placeholder = "Fractal Id ou Email"
         tf.delegate = self
