@@ -28,11 +28,9 @@ class LoginController: UIViewController {
         let btn4 = createButton(title: "Custom SignUp", method: #selector(presentCustomSignUp))
         let btn5 = createButton(title: "Profile", method: #selector(presentProfile))
 
-        let btn6 = createButton(title: "Get states", method: #selector(getStates))
-        let btn7 = createButton(title: "Get cities", method: #selector(getCities))
-        let btn8 = createButton(title: "Get units", method: #selector(getUnits))
 
-        let stackView = UIStackView(arrangedSubviews: [btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8])
+
+        let stackView = UIStackView(arrangedSubviews: [btn1, btn2, btn3, btn4, btn5])
         stackView.axis = .vertical
         stackView.spacing = 8
         stackView.isUserInteractionEnabled = true

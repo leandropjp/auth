@@ -365,7 +365,12 @@ class FractalLoginViewController: UIViewController, LoginViewInput
     }
 }
 
-extension FractalLoginViewController {
+extension FractalLoginViewController : UITextFieldDelegate {
+
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
 
     //    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
     //        if textField == emailField {

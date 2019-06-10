@@ -114,3 +114,11 @@ extension UIStackView {
         insertSubview(subView, at: 0)
     }
 }
+
+extension EditProfileViewController: UITextFieldDelegate {
+    
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return false
+    }
+}
