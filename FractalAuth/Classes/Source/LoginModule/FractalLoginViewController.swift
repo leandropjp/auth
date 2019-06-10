@@ -17,7 +17,7 @@ protocol LoginViewOutput {
     func doLogin(with email: String, password: String)
 }
 
-class LoginViewController: UIViewController, LoginViewInput
+class FractalLoginViewController: UIViewController, LoginViewInput
 {
     var output:  LoginViewOutput!
 
@@ -116,7 +116,7 @@ class LoginViewController: UIViewController, LoginViewInput
     // MARK: View lifecycle
 
     lazy var cardView: CardView = CardView()
-    let bundle = Bundle(for: LoginViewController.self).podResource(name: "FractalAuth")
+    let bundle = Bundle(for: FractalLoginViewController.self).podResource(name: "FractalAuth")
     var mainStackTopAnchor: NSLayoutConstraint?
     var mainStackBottomAnchor: NSLayoutConstraint?
 
@@ -365,7 +365,7 @@ class LoginViewController: UIViewController, LoginViewInput
     }
 }
 
-extension LoginViewController {
+extension FractalLoginViewController {
 
     //    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
     //        if textField == emailField {

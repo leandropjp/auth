@@ -9,7 +9,7 @@ import Foundation
 
 extension UIImage {
     convenience init?(podAssetName: String) {
-        let podBundle = Bundle(for: LoginViewController.self)
+        let podBundle = Bundle(for: FractalLoginViewController.self)
 
         /// A given class within your Pod framework
         guard let url = podBundle.url(forResource: "FractalAuth",

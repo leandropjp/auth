@@ -75,20 +75,8 @@ public class FractalAuth {
         FractalRestAPI.shared.environment.setUrl(customUrl)
     }
 
-    public static func getStates() -> Promise<[State]> {
-        return FractalRestAPI.shared.getStates()
-    }
-
-    public static func getCities(from stateId: String) -> Promise<[City]> {
-        return FractalRestAPI.shared.getCities(stateId: stateId)
-    }
-
-    public static func getUnits(state: String, city: String) -> Promise<[Unit]> {
-        return FractalRestAPI.shared.getUnits(stateId: state, cityId: city)
-    }
-
     public static func presentSignIn(with customApp: CustomizeBundle? = nil) -> Promise<User> {
-        let vc = LoginViewController()
+        let vc = FractalLoginViewController()
         vc.customizeBundle = customApp
         let nav = UINavigationController(rootViewController: vc)
         //nav.isNavigationBarHidden = true

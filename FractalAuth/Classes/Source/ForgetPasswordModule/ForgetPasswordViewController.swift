@@ -119,7 +119,7 @@ class ForgetPasswordViewController: UIViewController {
     // MARK: View lifecycle
     var fractalId = ""
     lazy var cardView: CardView = CardView()
-    let bundle = Bundle(for: LoginViewController.self).podResource(name: "FractalAuth")
+    let bundle = Bundle(for: FractalLoginViewController.self).podResource(name: "FractalAuth")
     var mainStackTopAnchor: NSLayoutConstraint?
     var mainStackBottomAnchor: NSLayoutConstraint?
 

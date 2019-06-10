@@ -13,12 +13,12 @@ class LoginModuleConfigurator {
 
     func configureModuleForViewInput<UIViewController>(viewInput: UIViewController) {
 
-        if let viewController = viewInput as? LoginViewController {
+        if let viewController = viewInput as? FractalLoginViewController {
             configure(viewController: viewController)
         }
     }
 
-    private func configure(viewController: LoginViewController) {
+    private func configure(viewController: FractalLoginViewController) {
 
         let router = LoginRouter()
         router.view = viewController

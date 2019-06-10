@@ -74,10 +74,6 @@ class LoginController: UIViewController {
         return btn
     }
 
-    @objc func getStates() {
-        FractalAuth.getStates()
-    }
-
     @objc func getCities() {
 
     }

@@ -207,7 +207,7 @@ class SignUpViewController: UIViewController, SignUpViewInput
 
     @objc func hasAccountTapped() {
         if !isFromLogin {
-            let vc = LoginViewController()
+            let vc = FractalLoginViewController()
             vc.customizeBundle = customizeBundle
             vc.isFromSignUp = true
             vc.loginResult = signUpResult

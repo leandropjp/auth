@@ -47,7 +47,6 @@ public enum Environment: Int {
 public enum Router: String {
     case user = "users"
     case userPhrase = "user_phrases"
-
     var baseUrl: String {
         return FractalRestAPI.shared.environment.baseUrl
     }
