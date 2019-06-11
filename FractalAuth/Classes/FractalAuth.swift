@@ -57,12 +57,12 @@ public class FractalAuth {
         UserDefaults.standard.removeObject(forKey: userKey)
     }
 
-    public static var user: User? {
+    public static var user: FractalUser? {
         get {
             let decoder = JSONDecoder()
             decoder.keyDecodingStrategy = .convertFromSnakeCase
             if let userData = UserDefaults.standard.value(forKey: userKey) as? Data,
-                let user = try? decoder.decode(User.self, from: userData) {
+                let user = try? decoder.decode(FractalUser.self, from: userData) {
                 return user
             } else {
                 return nil
@@ -75,7 +75,7 @@ public class FractalAuth {
         FractalRestAPI.shared.environment.setUrl(customUrl)
     }
 
-    public static func presentSignIn(with customApp: CustomizeBundle? = nil) -> Promise<User> {
+    public static func presentSignIn(with customApp: CustomizeBundle? = nil) -> Promise<FractalUser> {
         let vc = FractalLoginViewController()
         vc.customizeBundle = customApp
         let nav = UINavigationController(rootViewController: vc)
@@ -83,8 +83,8 @@ public class FractalAuth {
         if let window = UIApplication.shared.keyWindow {
             window.rootViewController?.present(nav, animated: true, completion: nil)
         }
-        let errorPromise = Promise<User>.init(error: ErrorType.resultNil)
-        let pendingPromise = Promise<User>.pending()
+        let errorPromise = Promise<FractalUser>.init(error: ErrorType.resultNil)
+        let pendingPromise = Promise<FractalUser>.pending()
         vc.loginResult = pendingPromise
         
         return vc.loginResult?.promise ?? errorPromise
@@ -95,7 +95,7 @@ public class FractalAuth {
      - Parameter customApp: The customize bundle used to prepare the view for a specific app.
      - Returns: A Promise<User> that can return an User or Error
      */
-    public static func presentSignUp(with customApp: CustomizeBundle? = nil) -> Promise<User> {
+    public static func presentSignUp(with customApp: CustomizeBundle? = nil) -> Promise<FractalUser> {
         let vc = SignUpViewController()
         vc.customizeBundle = customApp
         let nav = UINavigationController(rootViewController: vc)
@@ -103,8 +103,8 @@ public class FractalAuth {
         if let window = UIApplication.shared.keyWindow {
             window.rootViewController?.present(nav, animated: true, completion: nil)
         }
-        let errorPromise = Promise<User>.init(error: ErrorType.resultNil)
-        let pendingPromise = Promise<User>.pending()
+        let errorPromise = Promise<FractalUser>.init(error: ErrorType.resultNil)
+        let pendingPromise = Promise<FractalUser>.pending()
         vc.signUpResult = pendingPromise
 
         return vc.signUpResult?.promise ?? errorPromise

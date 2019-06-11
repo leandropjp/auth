@@ -27,7 +27,7 @@ class FractalRestAPI {
     var environment: Environment = .production
     var token: String?
 
-    func signUp(with params: Credentials) -> Promise<User> {
+    func signUp(with params: Credentials) -> Promise<FractalUser> {
         let url = Router.user.urlWith(path: "")
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -40,11 +40,11 @@ class FractalRestAPI {
             }.get {
                 UserDefaults.standard.set($0.data, forKey: userKey)
             }.compactMap {
-                try decoder.decode(User.self, from: $0.data)
+                try decoder.decode(FractalUser.self, from: $0.data)
         }
     }
 
-    func login(with params: Credentials) -> Promise<User> {
+    func login(with params: Credentials) -> Promise<FractalUser> {
         let url = Router.user.urlWith(path: "auth")
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
@@ -57,7 +57,7 @@ class FractalRestAPI {
             }.get {
                 UserDefaults.standard.set($0.data, forKey: userKey)
             }.compactMap {
-                try decoder.decode(User.self, from: $0.data)
+                try decoder.decode(FractalUser.self, from: $0.data)
         }
     }
 
@@ -76,7 +76,7 @@ class FractalRestAPI {
             }.compactMap {
                 if let response = $0.response as? HTTPURLResponse {
                     if response.statusCode != 204 {
-                        return try decoder.decode(User.self, from: $0.data).userPhrase
+                        return try decoder.decode(FractalUser.self, from: $0.data).userPhrase
                     }
                 }
                 return UserPhrase()
@@ -97,7 +97,7 @@ class FractalRestAPI {
             }.get {
                 UserDefaults.standard.set($0.data, forKey: userPhrase)
             }.compactMap {
-                return try decoder.decode(User.self, from: $0.data).userPhrase
+                return try decoder.decode(FractalUser.self, from: $0.data).userPhrase
         }
     }
 

@@ -88,7 +88,7 @@ class FractalLoginViewController: UIViewController, LoginViewInput
 
     let enterButton = ButtonWithShadow()
 
-    var loginResult: (promise: Promise<User>, resolver: Resolver<User>)?
+    var loginResult: (promise: Promise<FractalUser>, resolver: Resolver<FractalUser>)?
     var isFromSignUp = false
 
     // MARK: Object lifecycle

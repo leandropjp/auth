@@ -28,7 +28,7 @@ public struct Credentials: Codable {
     }
 }
 
-public struct User: Codable {
+public struct FractalUser: Codable {
     public var id: Int?
     public var name: String?
     public var email: String?

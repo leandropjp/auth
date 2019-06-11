@@ -97,8 +97,8 @@ class SignUpViewController: UIViewController, SignUpViewInput
         return stack
     }()
 
-    var signUpResult: (promise: Promise<User>, resolver: Resolver<User>)?
-    var test: Promise<User>?
+    var signUpResult: (promise: Promise<FractalUser>, resolver: Resolver<FractalUser>)?
+    var test: Promise<FractalUser>?
     var output:  SignUpViewOutput!
 
     // MARK: Object lifecycle
