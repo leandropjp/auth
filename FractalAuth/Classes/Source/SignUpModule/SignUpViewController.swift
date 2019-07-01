@@ -218,11 +218,12 @@ class SignUpViewController: UIViewController, SignUpViewInput
     }
 
     @objc func submitLogin() {
-        guard let email = emailField.text, let password = passwordField.text,
-            let confirmPassword = confirmPasswordField.text, let name = nameField.text else {
+        guard var email = emailField.text, let password = passwordField.text,
+            let confirmPassword = confirmPasswordField.text, var name = nameField.text else {
                 return
         }
         var isValidInfo = true
+        email = email.replacingOccurrences(of: "\\s+$", with: "", options: .regularExpression)
         if !email.isValidEmail() {
             emailField.tintColor = .red
             emailField.textColor = .red
@@ -241,6 +242,7 @@ class SignUpViewController: UIViewController, SignUpViewInput
             isValidInfo = false
         }
 
+        name = name.replacingOccurrences(of: "\\s+$", with: "", options: .regularExpression)
         if !name.isValidName() {
             nameField.tintColor = .red
             nameField.textColor = .red

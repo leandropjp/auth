@@ -218,10 +218,11 @@ class FractalLoginViewController: UIViewController, LoginViewInput
     }
 
     @objc func submitLogin() {
-        guard let email = emailField.text, let password = passwordField.text else {
+        guard var email = emailField.text, let password = passwordField.text else {
             return
         }
         var isValidInfo = true
+        email = email.replacingOccurrences(of: "\\s+$", with: "", options: .regularExpression)
         if !email.isValidEmail() {
             emailField.tintColor = .red
             emailField.textColor = .red
