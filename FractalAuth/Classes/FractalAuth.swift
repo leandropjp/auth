@@ -46,6 +46,12 @@ public struct CustomizeBundle {
     }
 }
 
+public struct AuthParameters {
+    var name: String?
+    var email: String!
+    var password: String?
+}
+
 public class FractalAuth {
 
     init() {
@@ -88,6 +94,12 @@ public class FractalAuth {
         vc.loginResult = pendingPromise
         
         return vc.loginResult?.promise ?? errorPromise
+    }
+
+    public static func signUp(with params: AuthParameters) -> Promise<FractalUser> {
+        let credentials = Credentials(login: params.email, password: params.password, name: params.name)
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        return FractalRestAPI.shared.signUp(with: credentials)
     }
 
     /**
