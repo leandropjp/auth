@@ -46,15 +46,25 @@ public struct CustomizeBundle {
     }
 }
 
-public struct AuthParameters {
+public struct AuthParameters: Codable {
     var name: String?
-    var email: String!
+    var email: String?
     var password: String?
+    var facebookUuid: String?
+    var facebookToken: String?
+    var photoUrl: String?
+    var userId: String?
+    //"https://graph.facebook.com/\(id)/picture?type=large"
 
-    public init(name: String? , email: String, password: String) {
+    public init(name: String? , email: String, password: String, facebookUuid: String?, facebookToken: String?,
+                photoUrl: String?) {
         self.name = name
         self.email = email
         self.password = password
+        self.facebookToken = facebookToken
+        self.facebookUuid = facebookUuid
+        self.photoUrl = photoUrl
+        self.userId = nil
     }
 }
 
@@ -103,9 +113,57 @@ public class FractalAuth {
     }
 
     public static func signUp(with params: AuthParameters) -> Promise<FractalUser> {
-        let credentials = Credentials(login: params.email, password: params.password, name: params.name)
-        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        let credentials = Credentials(login: params.email ?? "", password: params.password, name: params.name)
         return FractalRestAPI.shared.signUp(with: credentials)
+    }
+
+    public static func enterWithFacebook(params: AuthParameters) -> Promise<FractalUser> {
+        return Promise { seal in
+            FractalRestAPI
+                .shared
+                .loginWithFacebook(params: params)
+                .done({ (user) in
+                    seal.fulfill(user)
+                })
+                .catch({ (error) in
+                    print(error)
+                    if error._code == 401 {
+                        if params.email != nil {
+                            self.signUpWithFacebook(params: params)
+                                .done({ (user) in
+                                    seal.fulfill(user)
+                                }).catch({ (error) in
+                                    seal.reject(error)
+                                })
+                        }
+                    } else if error._code == 422 {
+                        if let email = params.email {
+                            FractalRestAPI
+                                .shared
+                                .getUserId(from: email)
+                                .then({ (user) -> Promise<FractalUser> in
+                                    var params = params
+                                    params.userId = "\(user.id ?? 0)"
+                                    return FractalRestAPI.shared.updateUserInformation(params: params)
+                                })
+                                .done({ (user) in
+                                    seal.fulfill(user)
+                                })
+                                .catch({ (error) in
+                                    seal.reject(error)
+                                })
+                        } else {
+                            seal.reject(error)
+                        }
+                    } else {
+                        seal.reject(error)
+                    }
+                })
+        }
+    }
+
+    public static func signUpWithFacebook(params: AuthParameters) -> Promise<FractalUser> {
+        return FractalRestAPI.shared.signUpWithFacebook(params: params)
     }
 
     /**

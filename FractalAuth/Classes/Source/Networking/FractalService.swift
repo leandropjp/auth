@@ -25,16 +25,99 @@ class FractalRestAPI {
     static let shared = FractalRestAPI()
 
     var environment: Environment = .production
-    var token: String?
+    var token: String? = "15f251b6fa-38456d09bb-1566319964"
 
     func signUp(with params: Credentials) -> Promise<FractalUser> {
         let url = Router.user.urlWith(path: "")
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
         return firstly {
             URLSession.shared.dataTask(.promise, with: try makeUrlRequest(httpMethod: .post,
                                                                           urlString: url,
                                                                           obj: params)).validate()
+            }.tap {
+                print($0)
+            }.get {
+                UserDefaults.standard.set($0.data, forKey: userKey)
+            }.compactMap {
+                try decoder.decode(FractalUser.self, from: $0.data)
+        }
+    }
+
+
+    func loginWithFacebook(params: AuthParameters) -> Promise<FractalUser> {
+        let url = Router.user.urlWith(path: "facebook_auth")
+        var parameters = [String:Any]()
+        parameters["facebook_uuid"] = params.facebookUuid
+        parameters["facebook_token"] = params.facebookToken
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        return firstly {
+            URLSession.shared.dataTask(.promise, with: try makeUrlRequest(httpMethod: .post,
+                                                                          urlString: url,
+                                                                          params: parameters)).validate()
+            }.tap {
+                print($0)
+            }.get {
+                UserDefaults.standard.set($0.data, forKey: userKey)
+            }
+            .compactMap {
+                try decoder.decode(FractalUser.self, from: $0.data)
+        }
+
+    }
+
+    func signUpWithFacebook(params: AuthParameters) -> Promise<FractalUser> {
+        let url = Router.user.urlWith(path: "")
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        return firstly {
+            URLSession.shared.dataTask(.promise, with: try makeUrlRequest(httpMethod: .post,
+                                                                          urlString: url,
+                                                                          obj: params)).validate()
+            }.tap {
+                print($0)
+            }.get {
+                UserDefaults.standard.set($0.data, forKey: userKey)
+            }.compactMap {
+                try decoder.decode(FractalUser.self, from: $0.data)
+        }
+    }
+
+    func getUserId(from email: String) -> Promise<FractalUser> {
+        let url = Router.user.urlWith(path: "names")
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        let params: [String: Any] = ["email": email]
+        return firstly {
+            URLSession.shared.dataTask(.promise, with: try makeUrlRequest(httpMethod: .post,
+                                                                          urlString: url,
+                                                                          params: params)).validate()
+            }.tap {
+                print($0)
+            }.get {
+                UserDefaults.standard.set($0.data, forKey: userKey)
+            }.compactMap {
+                try decoder.decode(Response<FractalUser>.self, from: $0.data).data?.first
+        }
+    }
+
+    func updateUserInformation(params: AuthParameters) -> Promise<FractalUser> {
+        let url = Router.user.urlWith(path: params.userId ?? "")
+        let decoder = JSONDecoder()
+        decoder.keyDecodingStrategy = .convertFromSnakeCase
+        UIApplication.shared.isNetworkActivityIndicatorVisible = true
+        let parameters:[String: Any] = ["facebook_uuid" : params.facebookUuid ?? "",
+                                        "photo_url": params.photoUrl ?? "",
+                                        "facebook_token": params.facebookToken ?? ""]
+        return firstly {
+            URLSession.shared.dataTask(.promise, with: try makeUrlRequest(httpMethod: .put,
+                                                                          urlString: url,
+                                                                          params: parameters)).validate()
             }.tap {
                 print($0)
             }.get {
@@ -119,6 +202,26 @@ class FractalRestAPI {
                 encoder.keyEncodingStrategy = .convertToSnakeCase
                 rq.httpBody = try encoder.encode(item)
             } else if let json = params {
+                rq.httpBody = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+            }
+        }
+
+        return rq
+    }
+
+    func makeUrlRequest(httpMethod: HTTPMethod = .get, urlString: String, params: JSON? = nil) throws -> URLRequest {
+        let url = URL(string: urlString)!
+        var rq = URLRequest(url: url)
+        rq.httpMethod = "\(httpMethod)"
+        rq.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        rq.addValue("application/json", forHTTPHeaderField: "Accept")
+
+        for header in Router.headers {
+            rq.setValue(header.value, forHTTPHeaderField: header.key)
+        }
+
+        if httpMethod == .post || httpMethod == .patch || httpMethod == .put {
+            if let json = params {
                 rq.httpBody = try? JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
             }
         }

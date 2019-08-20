@@ -28,6 +28,20 @@ public struct Credentials: Codable {
     }
 }
 
+struct Response<T:Codable>: Codable {
+    var data: [T]?
+//    {
+//    "data": [
+//    {
+//    "id": 12583,
+//    "fractal_id": 23980,
+//    "name": "Vanessa Santos",
+//    "email": "adm@ludie.com.br"
+//    }
+//    ]
+//    }
+}
+
 public struct FractalUser: Codable {
     public var id: Int?
     public var name: String?
