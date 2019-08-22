@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'FractalAuth'
-  s.version          = '0.2.5'
+  s.version          = '0.2.6'
   s.summary          = 'A simplified DataGateway lib to be used for authentication.'
 
 # This description is used to generate tags and improve search results.

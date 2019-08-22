@@ -18,7 +18,7 @@ enum ErrorType: LocalizedError {
             return "Login dismissed"
         }
     }
-    
+
     var localizedDescription: String {
         switch self {
         case .resultNil:
@@ -108,13 +108,17 @@ public class FractalAuth {
         let errorPromise = Promise<FractalUser>.init(error: ErrorType.resultNil)
         let pendingPromise = Promise<FractalUser>.pending()
         vc.loginResult = pendingPromise
-        
+
         return vc.loginResult?.promise ?? errorPromise
     }
 
     public static func signUp(with params: AuthParameters) -> Promise<FractalUser> {
         let credentials = Credentials(login: params.email ?? "", password: params.password, name: params.name)
-        return FractalRestAPI.shared.signUp(with: credentials)
+        return FractalRestAPI.shared.signUp(with: credentials).ensure {
+            DispatchQueue.main.async {
+                UIApplication.shared.isNetworkActivityIndicatorVisible = false
+            }
+        }
     }
 
     public static func enterWithFacebook(params: AuthParameters) -> Promise<FractalUser> {
@@ -126,39 +130,66 @@ public class FractalAuth {
                     seal.fulfill(user)
                 })
                 .catch({ (error) in
-                    print(error)
-                    if error._code == 401 {
+                    guard let pmError = error as? PMKHTTPError else {
+                        seal.reject(error)
+                        return
+                    }
+                    var errorCode = 0
+                    switch pmError {
+                    case .badStatusCode(let code, _, _):
+                        errorCode = code
+                    }
+
+                    if errorCode == 401 {
                         if params.email != nil {
                             self.signUpWithFacebook(params: params)
                                 .done({ (user) in
                                     seal.fulfill(user)
                                 }).catch({ (error) in
-                                    seal.reject(error)
+                                    guard let pmError = error as? PMKHTTPError else {
+                                        seal.reject(error)
+                                        return
+                                    }
+                                    var errorCode = 0
+                                    switch pmError {
+                                    case .badStatusCode(let code, _, _):
+                                        errorCode = code
+                                    }
+
+                                    if errorCode == 422, let email = params.email {
+                                        FractalRestAPI
+                                            .shared
+                                            .getUserId(from: email)
+                                            .then({ (user) -> Promise<FractalUser> in
+                                                var params = params
+                                                params.userId = "\(user.id ?? 0)"
+                                                return FractalRestAPI.shared.updateUserInformation(params: params)
+                                            })
+                                            .then({ (_) -> Promise<FractalUser> in
+                                                return FractalRestAPI
+                                                    .shared
+                                                    .loginWithFacebook(params: params)
+                                            })
+                                            .done({ (user) in
+                                                seal.fulfill(user)
+                                            })
+                                            .catch({ (error) in
+                                                seal.reject(error)
+                                        })
+                                    } else {
+                                        seal.reject(error)
+                                    }
+
                                 })
-                        }
-                    } else if error._code == 422 {
-                        if let email = params.email {
-                            FractalRestAPI
-                                .shared
-                                .getUserId(from: email)
-                                .then({ (user) -> Promise<FractalUser> in
-                                    var params = params
-                                    params.userId = "\(user.id ?? 0)"
-                                    return FractalRestAPI.shared.updateUserInformation(params: params)
-                                })
-                                .done({ (user) in
-                                    seal.fulfill(user)
-                                })
-                                .catch({ (error) in
-                                    seal.reject(error)
-                                })
-                        } else {
-                            seal.reject(error)
                         }
                     } else {
                         seal.reject(error)
                     }
                 })
+            }.ensure {
+                DispatchQueue.main.async {
+                    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+                }
         }
     }
 
@@ -167,7 +198,7 @@ public class FractalAuth {
     }
 
     /**
-    This method presents the Fractal Sign Up View.
+     This method presents the Fractal Sign Up View.
      - Parameter customApp: The customize bundle used to prepare the view for a specific app.
      - Returns: A Promise<User> that can return an User or Error
      */
