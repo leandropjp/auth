@@ -51,6 +51,7 @@ class FractalRestAPI {
         var parameters = [String:Any]()
         parameters["facebook_uuid"] = params.facebookUuid
         parameters["facebook_token"] = params.facebookToken
+        parameters["user_application_id"] = params.appId
         let decoder = JSONDecoder()
         decoder.keyDecodingStrategy = .convertFromSnakeCase
         UIApplication.shared.isNetworkActivityIndicatorVisible = true

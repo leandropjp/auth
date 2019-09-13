@@ -54,16 +54,18 @@ public struct AuthParameters: Codable {
     var facebookToken: String?
     var photoUrl: String?
     var userId: String?
+    var appId: Int?
     //"https://graph.facebook.com/\(id)/picture?type=large"
 
     public init(name: String? , email: String, password: String, facebookUuid: String?, facebookToken: String?,
-                photoUrl: String?) {
+                photoUrl: String?, appId: Int? = nil) {
         self.name = name
         self.email = email
         self.password = password
         self.facebookToken = facebookToken
         self.facebookUuid = facebookUuid
         self.photoUrl = photoUrl
+        self.appId = appId
         self.userId = nil
     }
 }
@@ -130,61 +132,7 @@ public class FractalAuth {
                     seal.fulfill(user)
                 })
                 .catch({ (error) in
-                    guard let pmError = error as? PMKHTTPError else {
-                        seal.reject(error)
-                        return
-                    }
-                    var errorCode = 0
-                    switch pmError {
-                    case .badStatusCode(let code, _, _):
-                        errorCode = code
-                    }
-
-                    if errorCode == 401 {
-                        if params.email != nil {
-                            self.signUpWithFacebook(params: params)
-                                .done({ (user) in
-                                    seal.fulfill(user)
-                                }).catch({ (error) in
-                                    guard let pmError = error as? PMKHTTPError else {
-                                        seal.reject(error)
-                                        return
-                                    }
-                                    var errorCode = 0
-                                    switch pmError {
-                                    case .badStatusCode(let code, _, _):
-                                        errorCode = code
-                                    }
-
-                                    if errorCode == 422, let email = params.email {
-                                        FractalRestAPI
-                                            .shared
-                                            .getUserId(from: email)
-                                            .then({ (user) -> Promise<FractalUser> in
-                                                var params = params
-                                                params.userId = "\(user.id ?? 0)"
-                                                return FractalRestAPI.shared.updateUserInformation(params: params)
-                                            })
-                                            .then({ (_) -> Promise<FractalUser> in
-                                                return FractalRestAPI
-                                                    .shared
-                                                    .loginWithFacebook(params: params)
-                                            })
-                                            .done({ (user) in
-                                                seal.fulfill(user)
-                                            })
-                                            .catch({ (error) in
-                                                seal.reject(error)
-                                        })
-                                    } else {
-                                        seal.reject(error)
-                                    }
-
-                                })
-                        }
-                    } else {
-                        seal.reject(error)
-                    }
+                    seal.reject(error)
                 })
             }.ensure {
                 DispatchQueue.main.async {
