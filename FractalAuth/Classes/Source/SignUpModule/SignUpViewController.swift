@@ -144,6 +144,12 @@ class SignUpViewController: UIViewController, SignUpViewInput
         if let bundle = self.customizeBundle {
             self.prepareViewForCustomApp(with: bundle)
         }
+
+        if #available(iOS 13.0, *) {
+            overrideUserInterfaceStyle = .light
+        } else {
+            // Fallback on earlier versions
+        }
     }
 
     func prepareViewForCustomApp(with bundle: CustomizeBundle) {
