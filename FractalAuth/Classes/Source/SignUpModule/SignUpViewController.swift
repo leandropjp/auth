@@ -70,6 +70,7 @@ class SignUpViewController: UIViewController, SignUpViewInput
         //lbl.adjustsFontSizeToFitWidth = true
         lbl.numberOfLines = 0
         lbl.textAlignment = .center
+        //lbl.adjustsFontSizeToFitWidth = true
         return lbl
     }()
 
@@ -201,7 +202,7 @@ class SignUpViewController: UIViewController, SignUpViewInput
         mainStackView.anchor(nil, left: view.leftAnchor, bottom: nil,
                              right: view.rightAnchor, topConstant: 16, leftConstant: 32, bottomConstant: 32,
                              rightConstant: 32, widthConstant: 0, heightConstant: 0)
-        mainStackTopAnchor = mainStackView.topAnchor.constraint(equalTo: view.compatibleSafeAreaLayoutGuide.topAnchor, constant: 16)
+        mainStackTopAnchor = mainStackView.topAnchor.constraint(equalTo: view.compatibleSafeAreaLayoutGuide.topAnchor, constant: 8)
         mainStackTopAnchor?.isActive = true
 
         mainStackBottomAnchor = mainStackView.bottomAnchor.constraint(equalTo: view.compatibleSafeAreaLayoutGuide.bottomAnchor, constant: -32)
@@ -282,7 +283,7 @@ class SignUpViewController: UIViewController, SignUpViewInput
         var defaultFontSize: CGFloat = 14
         var buttonSize: CGFloat = 40
         var bottomHeight: CGFloat = 50
-        var logoHeight: CGFloat = view.bounds.height * 0.134
+        var logoHeight: CGFloat = view.bounds.height * 0.10
         var fieldHeight: CGFloat = 40
         if UIDevice().screenType == .iPhones_5_5s_5c_SE {
             stackViewSpacing = 8
@@ -290,7 +291,7 @@ class SignUpViewController: UIViewController, SignUpViewInput
             defaultFontSize = 12
             buttonSize = 38
             bottomHeight = 35
-            logoHeight = view.bounds.height * 0.15
+            logoHeight = view.bounds.height * 0.10
             fieldHeight = 35
         }
 
@@ -300,7 +301,7 @@ class SignUpViewController: UIViewController, SignUpViewInput
         if logoHeight > 0 {
             logoImageView.sizeAnchor(widthConstant: 0, heightConstant: logoHeight)
         }
-
+        
         bottomLogoView.image = logoImg
         bottomLogoView.contentMode = .scaleAspectFit
         bottomLogoView.heightAnchor.constraint(lessThanOrEqualToConstant: bottomHeight).isActive = true
@@ -318,8 +319,9 @@ class SignUpViewController: UIViewController, SignUpViewInput
 
         let attrs = NSMutableAttributedString(string: "Já possui uma conta Fractal?  ",
                                               attributes: [.font: UIFont.systemFont(ofSize: defaultFontSize)])
-        attrs.append(NSAttributedString(string: "Entrar", attributes: [.foregroundColor: redColor,
-                                                                       .font: UIFont.boldSystemFont(ofSize: defaultFontSize)]))
+        attrs.append(NSAttributedString(string: "Entrar",
+                                        attributes: [.foregroundColor: redColor,
+                                                     .font: UIFont.boldSystemFont(ofSize: defaultFontSize)]))
         signupLabel.adjustsFontSizeToFitWidth = true
         signupLabel.attributedText = attrs
         signupLabel.isUserInteractionEnabled = true
@@ -328,7 +330,8 @@ class SignUpViewController: UIViewController, SignUpViewInput
 
         infoLabel.font = UIFont.systemFont(ofSize: defaultFontSize, weight: .medium)
         let stackView = UIStackView(arrangedSubviews: [cardLogoView, infoLabel, errorLabel,nameField, emailField,
-                                                       passwordField, confirmPasswordField, enterButton, signupLabel, bottomLogoView])
+                                                       passwordField, confirmPasswordField, enterButton, signupLabel,
+                                                       bottomLogoView])
         stackView.axis = .vertical
         stackView.spacing = stackViewSpacing
 
