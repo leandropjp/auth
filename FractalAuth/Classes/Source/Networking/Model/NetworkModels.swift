@@ -53,7 +53,7 @@ public struct FractalUser: Codable {
     public var photoUrl: String?
     public var active: Bool?
     public var facebookUuid: String?
-    public var cpf: String?
+    public var taxpayerNumber: String?
     public var phone: String?
     public var userPhrase: UserPhrase?
 
@@ -63,7 +63,7 @@ public struct FractalUser: Codable {
     private var userUserPhraseId: Int?
 
     public func hasCpf() -> Bool {
-        return !(self.cpf?.isEmpty ?? true)
+        return !(self.taxpayerNumber?.isEmpty ?? true)
     }
 
     public func hasPhone() -> Bool {
