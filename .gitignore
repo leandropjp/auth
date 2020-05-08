@@ -2,11 +2,17 @@
 #
 # gitignore contributors: remember to update Global/Xcode.gitignore, Objective-C.gitignore & Swift.gitignore
 
-## Build generated
+## User settings
+xcuserdata/
+
+## compatibility with Xcode 8 and earlier (ignoring not required starting Xcode 9)
+*.xcscmblueprint
+*.xccheckout
+
+## compatibility with Xcode 3 and earlier (ignoring not required starting Xcode 4)
 build/
 DerivedData/
-
-## Various settings
+*.moved-aside
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -15,15 +21,11 @@ DerivedData/
 !default.mode2v3
 *.perspectivev3
 !default.perspectivev3
-xcuserdata/
-
-## Other
-*.moved-aside
-*.xccheckout
-*.xcscmblueprint
 
 ## Obj-C/Swift specific
 *.hmap
+
+## App packaging
 *.ipa
 *.dSYM.zip
 *.dSYM
@@ -38,6 +40,12 @@ playground.xcworkspace
 # Packages/
 # Package.pins
 # Package.resolved
+# *.xcodeproj
+#
+# Xcode automatically generates this directory with a .xcworkspacedata file and xcuserdata
+# hence it is not needed unless you have added a package configuration file to your project
+# .swiftpm
+
 .build/
 
 # CocoaPods
@@ -47,18 +55,25 @@ playground.xcworkspace
 # https://guides.cocoapods.org/using/using-cocoapods.html#should-i-check-the-pods-directory-into-source-control
 #
 # Pods/
+#
+# Add this line if you want to avoid checking in source code from the Xcode workspace
+# *.xcworkspace
 
 # Carthage
 #
 # Add this line if you want to avoid checking in source code from Carthage dependencies.
 # Carthage/Checkouts
 
-Carthage/Build
+Carthage/Build/
+
+# Accio dependency management
+Dependencies/
+.accio/
 
 # fastlane
 #
-# It is recommended to not store the screenshots in the git repo. Instead, use fastlane to re-generate the
-# screenshots whenever they are needed.
+# It is recommended to not store the screenshots in the git repo.
+# Instead, use fastlane to re-generate the screenshots whenever they are needed.
 # For more information about the recommended setup visit:
 # https://docs.fastlane.tools/best-practices/source-control/#source-control
 
@@ -66,128 +81,10 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
-Example/Pods/Manifest.lock
-Example/Pods/IQKeyboardManagerSwift/LICENSE.md
-Example/Pods/IQKeyboardManagerSwift/README.md
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/IQKeyboardManager.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/IQKeyboardReturnKeyHandler.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/Categories/IQNSArray+Sort.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/Categories/IQUIScrollView+Additions.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/Categories/IQUITextFieldView+Additions.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/Categories/IQUIView+Hierarchy.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/Categories/IQUIViewController+Additions.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/Constants/IQKeyboardManagerConstants.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/Constants/IQKeyboardManagerConstantsInternal.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/IQTextView/IQTextView.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/IQToolbar/IQBarButtonItem.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/IQToolbar/IQInvocation.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/IQToolbar/IQPreviousNextView.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/IQToolbar/IQTitleBarButtonItem.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/IQToolbar/IQToolbar.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/IQToolbar/IQUIView+IQKeyboardToolbar.swift
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/Resources/IQKeyboardManager.bundle/IQButtonBarArrowDown@2x.png
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/Resources/IQKeyboardManager.bundle/IQButtonBarArrowDown@3x.png
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/Resources/IQKeyboardManager.bundle/IQButtonBarArrowLeft@2x.png
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/Resources/IQKeyboardManager.bundle/IQButtonBarArrowLeft@3x.png
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/Resources/IQKeyboardManager.bundle/IQButtonBarArrowRight@2x.png
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/Resources/IQKeyboardManager.bundle/IQButtonBarArrowRight@3x.png
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/Resources/IQKeyboardManager.bundle/IQButtonBarArrowUp@2x.png
-Example/Pods/IQKeyboardManagerSwift/IQKeyboardManagerSwift/Resources/IQKeyboardManager.bundle/IQButtonBarArrowUp@3x.png
-Example/Pods/LBTATools/LICENSE
-Example/Pods/LBTATools/README.md
-Example/Pods/LBTATools/Source/AnchoredConstraints.swift
-Example/Pods/LBTATools/Source/UIColor+Helpers.swift
-Example/Pods/LBTATools/Source/Extensions/AspectFitImageView.swift
-Example/Pods/LBTATools/Source/Extensions/IndentedTextField.swift
-Example/Pods/LBTATools/Source/Extensions/UIButton.swift
-Example/Pods/LBTATools/Source/Extensions/UILabel.swift
-Example/Pods/LBTATools/Source/Extensions/UIStackView.swift
-Example/Pods/LBTATools/Source/Extensions/UITextField+Tools.swift
-Example/Pods/LBTATools/Source/Extensions/UIView+Layout.swift
-Example/Pods/LBTATools/Source/Extensions/UIView+Stacking.swift
-Example/Pods/LBTATools/Source/Form/LBTAFormController.swift
-Example/Pods/LBTATools/Source/ListController/LBTAListCell.swift
-Example/Pods/LBTATools/Source/ListController/LBTAListController.swift
-Example/Pods/LBTATools/Source/ListController/LBTAListHeaderController.swift
-Example/Pods/LBTATools/Source/UIKitSubclasses/CircularImageView.swift
-Example/Pods/Local Podspecs/FractalAuth.podspec.json
-Example/Pods/Pods.xcodeproj/project.pbxproj
-Example/Pods/Pods.xcodeproj/project.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
-Example/Pods/PromiseKit/LICENSE
-Example/Pods/PromiseKit/README.md
-Example/Pods/PromiseKit/Extensions/Foundation/Sources/afterlife.swift
-Example/Pods/PromiseKit/Extensions/Foundation/Sources/NSNotificationCenter+AnyPromise.h
-Example/Pods/PromiseKit/Extensions/Foundation/Sources/NSNotificationCenter+AnyPromise.m
-Example/Pods/PromiseKit/Extensions/Foundation/Sources/NSNotificationCenter+Promise.swift
-Example/Pods/PromiseKit/Extensions/Foundation/Sources/NSObject+Promise.swift
-Example/Pods/PromiseKit/Extensions/Foundation/Sources/NSTask+AnyPromise.h
-Example/Pods/PromiseKit/Extensions/Foundation/Sources/NSTask+AnyPromise.m
-Example/Pods/PromiseKit/Extensions/Foundation/Sources/NSURLSession+AnyPromise.h
-Example/Pods/PromiseKit/Extensions/Foundation/Sources/NSURLSession+AnyPromise.m
-Example/Pods/PromiseKit/Extensions/Foundation/Sources/NSURLSession+Promise.swift
-Example/Pods/PromiseKit/Extensions/Foundation/Sources/PMKFoundation.h
-Example/Pods/PromiseKit/Extensions/Foundation/Sources/Process+Promise.swift
-Example/Pods/PromiseKit/Sources/after.m
-Example/Pods/PromiseKit/Sources/after.swift
-Example/Pods/PromiseKit/Sources/AnyPromise+Private.h
-Example/Pods/PromiseKit/Sources/AnyPromise.h
-Example/Pods/PromiseKit/Sources/AnyPromise.m
-Example/Pods/PromiseKit/Sources/AnyPromise.swift
-Example/Pods/PromiseKit/Sources/Box.swift
-Example/Pods/PromiseKit/Sources/Catchable.swift
-Example/Pods/PromiseKit/Sources/Configuration.swift
-Example/Pods/PromiseKit/Sources/CustomStringConvertible.swift
-Example/Pods/PromiseKit/Sources/Deprecations.swift
-Example/Pods/PromiseKit/Sources/dispatch_promise.m
-Example/Pods/PromiseKit/Sources/Error.swift
-Example/Pods/PromiseKit/Sources/firstly.swift
-Example/Pods/PromiseKit/Sources/fwd.h
-Example/Pods/PromiseKit/Sources/Guarantee.swift
-Example/Pods/PromiseKit/Sources/hang.m
-Example/Pods/PromiseKit/Sources/hang.swift
-Example/Pods/PromiseKit/Sources/join.m
-Example/Pods/PromiseKit/Sources/LogEvent.swift
-Example/Pods/PromiseKit/Sources/NSMethodSignatureForBlock.m
-Example/Pods/PromiseKit/Sources/PMKCallVariadicBlock.m
-Example/Pods/PromiseKit/Sources/Promise.swift
-Example/Pods/PromiseKit/Sources/PromiseKit.h
-Example/Pods/PromiseKit/Sources/race.m
-Example/Pods/PromiseKit/Sources/race.swift
-Example/Pods/PromiseKit/Sources/Resolver.swift
-Example/Pods/PromiseKit/Sources/Thenable.swift
-Example/Pods/PromiseKit/Sources/when.m
-Example/Pods/PromiseKit/Sources/when.swift
-Example/Pods/Target Support Files/FractalAuth/FractalAuth-dummy.m
-Example/Pods/Target Support Files/FractalAuth/FractalAuth-Info.plist
-Example/Pods/Target Support Files/FractalAuth/FractalAuth-prefix.pch
-Example/Pods/Target Support Files/FractalAuth/FractalAuth-umbrella.h
-Example/Pods/Target Support Files/FractalAuth/FractalAuth.modulemap
-Example/Pods/Target Support Files/FractalAuth/FractalAuth.xcconfig
-Example/Pods/Target Support Files/FractalAuth/ResourceBundle-FractalAuth-FractalAuth-Info.plist
-Example/Pods/Target Support Files/IQKeyboardManagerSwift/IQKeyboardManagerSwift-dummy.m
-Example/Pods/Target Support Files/IQKeyboardManagerSwift/IQKeyboardManagerSwift-Info.plist
-Example/Pods/Target Support Files/IQKeyboardManagerSwift/IQKeyboardManagerSwift-prefix.pch
-Example/Pods/Target Support Files/IQKeyboardManagerSwift/IQKeyboardManagerSwift-umbrella.h
-Example/Pods/Target Support Files/IQKeyboardManagerSwift/IQKeyboardManagerSwift.modulemap
-Example/Pods/Target Support Files/IQKeyboardManagerSwift/IQKeyboardManagerSwift.xcconfig
-Example/Pods/Target Support Files/LBTATools/LBTATools-dummy.m
-Example/Pods/Target Support Files/LBTATools/LBTATools-Info.plist
-Example/Pods/Target Support Files/LBTATools/LBTATools-prefix.pch
-Example/Pods/Target Support Files/LBTATools/LBTATools-umbrella.h
-Example/Pods/Target Support Files/LBTATools/LBTATools.modulemap
-Example/Pods/Target Support Files/LBTATools/LBTATools.xcconfig
-Example/Pods/Target Support Files/Pods-FractalAuth_Example/Pods-FractalAuth_Example-acknowledgements.markdown
-Example/Pods/Target Support Files/Pods-FractalAuth_Example/Pods-FractalAuth_Example-acknowledgements.plist
-Example/Pods/Target Support Files/Pods-FractalAuth_Example/Pods-FractalAuth_Example-dummy.m
-Example/Pods/Target Support Files/Pods-FractalAuth_Example/Pods-FractalAuth_Example-frameworks.sh
-Example/Pods/Target Support Files/Pods-FractalAuth_Example/Pods-FractalAuth_Example-Info.plist
-Example/Pods/Target Support Files/Pods-FractalAuth_Example/Pods-FractalAuth_Example-umbrella.h
-Example/Pods/Target Support Files/Pods-FractalAuth_Example/Pods-FractalAuth_Example.debug.xcconfig
-Example/Pods/Target Support Files/Pods-FractalAuth_Example/Pods-FractalAuth_Example.modulemap
-Example/Pods/Target Support Files/Pods-FractalAuth_Example/Pods-FractalAuth_Example.release.xcconfig
-Example/Pods/Target Support Files/PromiseKit/PromiseKit-dummy.m
-Example/Pods/Target Support Files/PromiseKit/PromiseKit-Info.plist
-Example/Pods/Target Support Files/PromiseKit/PromiseKit-prefix.pch
-Example/Pods/Target Support Files/PromiseKit/PromiseKit-umbrella.h
-Example/Pods/Target Support Files/PromiseKit/PromiseKit.modulemap
-Example/Pods/Target Support Files/PromiseKit/PromiseKit.xcconfig
+
+# Code Injection
+#
+# After new code Injection tools there's a generated folder /iOSInjectionProject
+# https://github.com/johnno1962/injectionforxcode
+
+iOSInjectionProject/
